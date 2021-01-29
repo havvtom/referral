@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Project;
 use App\Models\Referral;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -62,6 +63,11 @@ class User extends Authenticatable implements JWTSubject
     public function referrals()
     {
         return $this->hasMany(Referral::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'owner_id');
     }
 
 }

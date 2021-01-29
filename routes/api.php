@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\MeController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Referrals\ReferralController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,11 +24,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['prefix' => 'projects', 'middleware' => 'auth'], function () {
+	Route::get('/', [ProjectController::class, 'index']);
+	Route::post('/', [ProjectController::class, 'store']);
+	Route::get('/{project}', [ProjectController::class, 'show']);
+});
+
 Route::get('register', [RegisterController::class, 'create'])->name('register');
 
 Route::group(['prefix' => 'auth', 'namespace' => 'Auth', 'as' => 'auth.'], function () {
 	Route::post('/register', [RegisterController::class, 'store']);
 	Route::post('/login', [LoginController::class, 'login']);
+	Route::post('/logout', [LogoutController::class, 'logout']);
 	Route::get('/user', [MeController::class, 'me']);
 });
 

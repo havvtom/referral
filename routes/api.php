@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\MeController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Referrals\ReferralController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::group(['prefix' => 'projects', 'middleware' => 'auth'], function () {
 	Route::get('/', [ProjectController::class, 'index']);
 	Route::post('/', [ProjectController::class, 'store']);
 	Route::get('/{project}', [ProjectController::class, 'show']);
+	Route::post('/{project}/tasks', [TaskController::class, 'store']);
 });
 
 Route::get('register', [RegisterController::class, 'create'])->name('register');

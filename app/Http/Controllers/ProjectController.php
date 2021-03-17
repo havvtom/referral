@@ -17,7 +17,7 @@ class ProjectController extends Controller
 
     public function index(Request $request)
     {
-    	return new ProjectResourceCollection(Project::all());	
+    	return new ProjectResourceCollection($request->user()->accessibleProjects());	
     }
 
     public function show(Project $project)
@@ -29,9 +29,23 @@ class ProjectController extends Controller
 
     public function store(ProjectFormRequest $request)
     {	
-    	$project = $request->user()->projects()->create($request->only('title', 'description'));
+    	$project = $request->user()->projects()->create($request->only('title', 'description', 'notes'));
 
     	return new ProjectResource($project);
 
+    }
+
+    public function update(Project $project, ProjectFormRequest $request)
+    {
+        $this->authorize('update', $project);
+
+        $project->update($request->only('body', 'description', 'notes'));
+    }
+
+    public function destroy(Project $project)
+    {
+        $this->authorize('create', $project);
+
+        $project->delete();
     }
 }

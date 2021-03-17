@@ -39,9 +39,9 @@ class ProjectPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Project $project)
     {
-        //
+        return $user->is($project->owner);
     }
 
     /**
@@ -53,7 +53,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
-        return $user->id === $project->owner_id;
+        return $user->id == $project->owner_id || $project->members->contains($user);
     }
 
     /**

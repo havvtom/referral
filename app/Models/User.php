@@ -67,7 +67,17 @@ class User extends Authenticatable implements JWTSubject
 
     public function projects()
     {
-        return $this->hasMany(Project::class, 'owner_id');
+        return $this->hasMany(Project::class, 'owner_id')->latest('updated_at');
+    }
+
+    public function invitedProjects()
+    {
+        return $this->belongsToMany(Project::class, 'project_members', 'user_id', 'project_id');
+    }
+
+    public function accessibleProjects()
+    {
+        return $this->invitedProjects->merge( $this->projects );
     }
 
 }

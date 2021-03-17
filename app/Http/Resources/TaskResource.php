@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\TaskResourceCollection;
+use App\Http\Resources\ProjectResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
-class ProjectResource extends JsonResource
+class TaskResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +17,8 @@ class ProjectResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'description' => Str::limit($this->description, 60),
-            'tasks' => new TaskResourceCollection($this->tasks)
+            'body' => $this->body,
+            'completed' => $this->completed
         ];
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReferralFormRequest;
 use App\Http\Resources\ReferralResourceCollection;
 use App\Mail\Referrals\ReferralReceived;
+use App\Models\Project;
+use App\Models\User;
 use App\Rules\NotReferringExisting;
 use App\Rules\NotReferringSelf;
 use Illuminate\Http\Request;
@@ -20,8 +22,15 @@ class ReferralController extends Controller
 		return new ReferralResourceCollection($referrals);
 	}
 
-    public function store(ReferralFormRequest $request)
+    public function store(ReferralFormRequest $request, Project $project)
     {
+        $this->authorize('create', $project);
+
+        if ($user = User::whereEmail($request->email)->first()){
+
+            return $project->invite( $user );
+
+        };        
 
     	$referral = $request->user()->referrals()->create($request->only('email'));
 

@@ -29,7 +29,11 @@ Route::group(['prefix' => 'projects', 'middleware' => 'auth'], function () {
 	Route::get('/', [ProjectController::class, 'index']);
 	Route::post('/', [ProjectController::class, 'store']);
 	Route::get('/{project}', [ProjectController::class, 'show']);
+	Route::patch('/{project}', [ProjectController::class, 'update']);
+	Route::delete('/{project}', [ProjectController::class, 'destroy']);
 	Route::post('/{project}/tasks', [TaskController::class, 'store']);
+	Route::patch('/{project}/tasks/{task}', [TaskController::class, 'update']);
+	Route::delete('/{project}/tasks/{task}', [TaskController::class, 'destroy']);
 });
 
 Route::get('register', [RegisterController::class, 'create'])->name('register');
@@ -43,5 +47,5 @@ Route::group(['prefix' => 'auth', 'namespace' => 'Auth', 'as' => 'auth.'], funct
 
 Route::group(['prefix' => 'referrals', 'namespace' => 'Referrals', 'middleware' => ('auth')], function () {
 	Route::get('/', [ReferralController::class, 'index']);
-	Route::post('/', [ReferralController::class, 'store']);
+	Route::post('/{project}', [ReferralController::class, 'store']);
 });
